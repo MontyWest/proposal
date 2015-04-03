@@ -7,10 +7,27 @@
 \usepackage{graphicx}
 \usepackage{listings}
 \usepackage[nounderscore]{syntax}
+\usepackage{multirow}
+\usepackage{chngpage}
+\usepackage{array}
+
 
 \lstset{basicstyle=\footnotesize\ttfamily, columns=fullflexible}
 
 \graphicspath{ {images/} }
+
+
+\makeatletter
+\newcommand{\thickhline}{%
+    \noalign {\ifnum 0=`}\fi \hrule height 1pt
+    \futurelet \reserved@a \@xhline
+}
+\newcolumntype{"}{@{\hskip\tabcolsep\vrule width 1pt\hskip\tabcolsep}}
+\makeatother
+
+\newcommand\Tstrut{\rule{0pt}{3.3ex}}       % "top" strut
+\newcommand\Bstrut{\rule[-1.3ex]{0pt}{0pt}} % "bottom" strut
+\newcommand{\TBstrut}{\Tstrut\Bstrut} % top&bottom struts
 
 \begin{document}
 
@@ -114,65 +131,55 @@ The aim of this project is to explore the topic of reinforcement learning in vid
 % Definitions
 %-----------------------------------------------------------------------
 
-\section{Concept Definitions}
+\section{Background}
+
+Reinforcement learning has long been a staple of academic research into AI and Dynamic Programming, especially in robotics and board games. However, it has also had success in more niche problems, such as helicopter control \cite{rlheli} and human-computer dialogue \cite{rlhci}.
+
+\subsection{Concept Definitions}
 
 At this point it is useful to introduce some high level descriptions/definitions of some concepts key to this project.
 
-\subsection{Game Specific}
+\subsubsection{Game Specific}
 
-\subsubsection{Rules Sets}
+\paragraph{Rules Sets}
 [TODO] [Is this needed?]
 
-\subsubsection{Behaviour Trees (BTs)}
+\paragraph{Behaviour Trees (BTs)}
 
 Behaviour Trees are a construct which encodes progressively more specific actions. From the top of the tree broad behaviours are broken down in to subtrees. BTs are executed by traversing the tree and executing nodes.
 
 Nodes of the tress can either be \emph{control} nodes or \emph{leaf} nodes. \emph{Control} nodes affect how their children will be executed, for example a \textbf{Sequence} node asserts that it's children be executed in order from left to right (akin to AND) and a \textbf{Selector} node executed children in order from left to right until one succeeds (akin to OR). \emph{Leaf} nodes can be \textbf{Conditions}, which succeed if the game state passes the condition and \textbf{Actions}, which carry out a set of moves or decisions. \cite{gramev}
 
 
-\subsection{Learning}
+\subsubsection{Learning}
 
-\subsubsection{Online/Offline}
+\paragraph{Online/Offline}
 \begin{description}
 	\item[Offline] An offline (or batch) learner trains on an entire dataset before applying changes. 
 	\item[Online] A online learner reacts/learns from data immediately after each datapoint.
 \end{description} 
 (reference?)
 
-\subsubsection{Reinforcement Learning}
+\paragraph{Reinforcement Learning}
+
 A reinforcement learning agent focuses on a learning problem, with it's goal to maximise \emph{reward}. Given a current \emph{state} the agent chooses an \emph{action} available to it, which is determined by a \emph{policy}. This action maps the current \emph{state} to a new \emph{state}. This \emph{transition} is then evaluated for it's \emph{reward} . This \emph{reward} often affects the \emph{policy} of future iterations, but \emph{policies} may be stochastic to some level. \cite[s.~1.3]{suttonrl}
 
 	
-\subsubsection{Genetic Algorithms (GAs)}
+\paragraph{Genetic Algorithms (GAs)}
 
 Genetic Algorithms are an subset of Evolutionary Methods and model the solution as a \emph{population} of \emph{individuals}. Each \emph{individual} has a set of \emph{chromosomes}, which can be thought of as simple pieces of analogous information (most often in the form of bit strings). Each \emph{individual} is assessed by some \emph{fitness function}. This assessment is used to cull the \emph{population}, akin to survival of the fittest. Then a new \emph{population} is created (possibly containing the fittest from the previous \emph{population}) using \emph{crossover} of \emph{chromosomes} from two (or more) \emph{individuals} (akin to sexual reproduction), \emph{mutation} of \emph{chromosomes} from one \emph{individual} (akin to asexual reproduction) and \emph{re-ordering} of  \emph{chromosomes}. Each new  \emph{population} is called a \emph{generation}. \cite[p.~7]{mitchellga}
 
-\subsubsection{Grammatical Evolution (GE)}
+\paragraph{Grammatical Evolution (GE)}
 
 The solution in Grammatical Evolution is a program or program fragment. This program is described by a context-free grammar. The search space of the problem consists of integer strings, which are normally evolved using a GA. These integer strings encode a program tree using the context-free grammar. Decoding starts with the start symbol or expression and continues with the left most nonterminal. Imagining each symbol has an ordered list of possible choices, the next integer in the string is calculated modulo the length of the choice list, this value is then the index of the symbol's replacement. This continues until the grammar is in a terminal state. \cite{gramev}
 
-[TODO: Good example]
-\iffalse
-For example for the following context-free grammar integer string $\{3, 6, 5, 2\}$ evaluates to `Andrew Charlie Matthews':
-
-\begin{grammar}
-<name> ::= <forename> <surname> | <forename> <forename> <surname> \\
-<forename> :: = `Andrew' | `Bob' | `Charlie' \\
-<surname> ::= `Smith' | `Jones' | `Matthews' | `White' \\
-\end{grammar}
-\fi
 
 
 %-----------------------------------------------------------------------
 % Reinforcement Learning in Games (Current Work in Field)
 %-----------------------------------------------------------------------
 
-\section{Reinforcement Learning and Games}
-
-Reinforcement learning has long been a staple of academic research into AI and Dynamic Programming, especially in robotics and board games. However, it has also had success in more niche problems, such as helicopter control \cite{rlheli} and human-computer dialogue \cite{rlhci}.
-
-
-\subsection{In Commercial Games}
+\subsection{Reinforcement Learning and Commercial Games}
 
 \subsubsection*{Desirability}
 
@@ -182,118 +189,67 @@ Ventures in utilising reinforcement learning in commercial video games have been
 
 The main issue with constructing effectual learning (or learnt) AI in game is time and money. Game development works on strict cycles and have limited resources to invest into AI research. Furthermore, one player playing one game produces a very small data set, making learning from the player challenging. Moreover, AI that is believably human is a field still in it's infancy. \cite{evolutioningamedesign}
 
-\subsubsection*{Examples}
-
-One of the most advanced AIs created in a commercial game is in \emph{Black and White}. Alongside decision trees and rule tables, the player's created creature uses neural networks and a learning mechanism to develop desires over the course of the game. \cite{blackandwhite}
-
-Other examples include the use of reinforcement learning in Project Gotham Racing's development to produce AI drivers \cite{projectgothamracing} and learning in Forza Motorsport, where the player can train a Drivatar\texttrademark\ to race for him/her \cite{forza}.
-
-\subsubsection{City Conquest}
-
-One particular example of evolutionary methods in commercial games is in the game \emph{City Conquest}, a Tower Defence RTS hybrid. It used genetic algorithms to produce build plans for it's AI player. Each build script underwent mutation after each generation that changed a buildings type, location or order in the plan. This new plan was then assessed against another AI player in a head to head contest. \cite{evolutioningamedesign}.
-
-
-\subsection{In Game AI Competitions}
+\subsection{Reinforcement Learning and Game AI Competitions}
 \label{subsec:gameaicomps}
 
 Despite the lack of commercial success, video games can act as great benchmark for Reinforcement Learning AI. They are designed to challenge humans, and therefore will challenge AI methods; games generally have some level of learning curve associated with playing them (as a human); games mostly have some notion of scoring suitable for a fitness function and they are generally accessible to students, academic and the general public alike. \cite[p.~9]{panorama} \cite[p.~1]{marioaicomp} \cite[p.~2]{2012the}
 
 Over the last few years several game based AI competitions have begun, over a variety of genres. These competitions challenge entrants to create an agent that plays a game and is rated according to the competitions specification. They have attracted both academic \cite[p.~2]{2012the} and media interest \cite[p.~2]{marioaicomp}. Hence, several interesting papers have been published into the application of Reinforcement Learning in video games have emerged. Approaches tend to vary widely, modelling and tackling the problem very differently and combining and specialising techniques in previously unseen ways. \cite[p.~11]{2012the}
 
-Excluding the Mario AI Competition (which will be the subject of the next section), here are brief details of the competitions which are of relevance to this project \cite{2014how}.
+Some brief details of the competitions which are of relevance to this project are compiled in to Table \ref{tab:gameaicomp}. The Mario AI Competition is also explored in more detail below.
 
-\subsubsection{The Simulated Car Racing Competition}
+\begin{table}[t]
+  \begin{adjustwidth}{-4cm}{-4cm}
+  \begin{center} \small
+    \begin{tabular}{ | p{2cm} | p{3cm} | p{10cm} |}
+    \hline
+    \textbf{Genre} & \textbf{Game} & \textbf{Description} \TBstrut \\ \thickhline
+    
+    \multicolumn{3}{| l |}{\emph{\textbf{ The Simulated Car Racing Competition}}} \Tstrut \\ \hline
+    Racing & TORCS (Open-source) \cite{torcs} &
+    Competitors enter drivers, that undergo races against other entrants which include qualifying and multi-car racing. The competition encourages the use of learning techniques (but doesn't ban non-learning agents). \cite{scrc} 
+     \\ \thickhline
+    
+    \multicolumn{3}{| l |}{\emph{\textbf{ The 2K BotPrize}}} \Tstrut \\ \hline
+    First Person Shooter (FPS) & Unreal Tournament 2004 &
+    Competitors enter `bots' that play a multi-player game against a mix of other bots and humans. Entrants are judged on Turing test basis, where a panel of judges attempt to identify the human players. \cite{2kbot}
+     \\ \thickhline
+    
+    \multicolumn{3}{| l |}{\emph{\textbf{ The Starcraft AI Competition}}} \Tstrut \\ \hline
+    Real Time Strategy (RTS) & Starcraft &
+    Competitors play against each other in a 1 on 1 knockout style tournament. Implementing an agent involves solving both micro objectives, such as path-planning, and macro objectives, such as base progression. \cite{starcomp}
+     \\ \thickhline
+    
+   \multicolumn{3}{| l |}{\emph{\textbf{ The Mario AI Competition}}} \Tstrut \\ \hline
+    Platformer & Infinite Mario Bros (Open-source) &
+    Competitors submit agents that attempt to play (as a human would) or create levels. The competition is split into `tracks', including Gameplay, Learning, Turing and Level Generation. In Gameplay, each agent must play unseen levels, earning a score, which is compared to other entrants. \cite{2012the}
+     \\ \hline
+    
+    \end{tabular}
+  \end{center}
+  \end{adjustwidth}
+  \caption{This table summarises some recent game AI competitions \cite{2014how}}
+  \label{tab:gameaicomp}
+\end{table}
+	
 
-This competition is built around an open-source racing simulation called TORCS \cite{torcs}. Competitors enter drivers, that undergo races against other entrants which include qualifying and multi-car racing. The winning entrants often employ learning mechanisms, and the competition encourages this (but doesn't ban non-learning techniques). \cite{scrc} 
 
-The top performing AI drivers from 2009 all used some form of offline learning for general play and many used simple online learning to avoid repeated mistakes \cite[p.~144]{scrc}. For example, the top two entrants both used evolutionary learning to determine optimal speed and angle for different segments of track and online learning to avoid crashes and mistakes from previous laps \cite[pp.~135-136]{scrc}.
+\subsubsection{The Mario AI Competition}
 
+The Mario AI Competition, organised by Sergey Karakovskiy and Julian Togelius, ran between 2009-2012 and used an adapted version of the open-source game Infinite Mario Bros. From 2010 onwards the competition was split into four distinct `tracks'. We shall focus on the unseen Gameplay track, where agents play several unseen levels as Mario with the aim to finish the level (and score highly). \cite{marioaicomp} \cite{2012the}
 
-\subsubsection{The 2K BotPrize}
-[TODO]
-\begin{itemize}
-	\item FPS, judged on Turing capabilities
-	\item mimicry of human, neuroevolution with human-like fitness function (source botprize homepage)
-\end{itemize}
-
-\subsubsection{The Starcraft AI Competition}
-[TODO]
-\begin{itemize}
-	\item RTS, planning, path-finding
-	\item complexity - learning, several approaches
-	\item EMAPF, AI that models opponent, learns from human, AI testing using evolutionary methods
-\end{itemize}
-
-\section{The Mario AI Competition}
-
-The Mario AI Competition, organised by Sergey Karakovskiy and Julian Togelius, ran between 2009-2012 and used an adapted version of the open-source game Infinite Mario Bros. From 2010 onwards the competition was split into three distinct objectives: Gameplay, where agents play as Mario with the aim to finish the level (and score highly); Turing, where agents attempted to fool a panel of judges into thinking they were human and Level Generation, where entrants were tasked with creating intelligent, procedural level generators. In 2010, the Gameplay portion of the competition was split into two variants, one where the agent plays unseen levels and one where it has the opportunity to play the level 10,000 times and then is evaluated on the 10,001st (the \emph{Learning} track). This project will only focus on the Gameplay section, specifically the unseen level variant. \cite{marioaicomp} \cite{2012the}
-
-\subsection{Infinite Mario Bros.}
+\paragraph{Infinite Mario Bros.}
 
 Infinite Mario Bros (IMB) \cite{imb} is an open-source clone of Super Mario Bros.~3, created by Markus Persson. The core gameplay is described as a \emph{Platformer}. The game is viewed side-on with a 2D perspective. Players control Mario and travel left to right in an attempt to reach the end of the level (and maximise score). The screen shows a short section of the level, with Mario centred. Mario must navigating terrain and avoid enemies and pits. To do this Mario can move left and right, jump, duck and speed up. Mario also exists in 3 different states, \emph{small}, \emph{big} and \emph{fire} (the latter of which enables Mario to shoot fireballs), accessed by finding powerups. Touching an enemy (in most cases) reverts Mario to a previous state. Mario dies if he touches an enemy in the \emph{small} state or falls into a pit, at which point the level ends. Score is affected by how many coins Mario has collected, how many enemies he has killed (by jumping on them or by using fireballs or shells) and how quickly he has completed the level. \cite[p.~3]{2012the}
 
-\subsection{Competition Software}
-
-To make IMB a more suitable benchmark for the competition organisers made several adjustments to the base Java code. Below are some of the most important aspects in regard to reinforcement learning.
-
-\subsubsection{GUI and Timing}
-
-The benchmark runs at  constant 25 frames per second (fps), which allows 40ms for the agent controller to decide on an action each time step. The software allows for this reliance on the system clock to be turned off, as well as the rendering of the GUI. This allows for levels to be run through several thousands times faster than otherwise. This is essential for implementing an effective learning strategy, as high numbers of playthroughs take minimal time. \cite[p.~3]{2012the}
-
-\subsubsection{Tuneable Level Generator}
-
-Another essential element for effective learning is level generation. Without the reliance on human designed levels many different levels can be learnt from. The benchmark expands on the level generator from IMB, making is tuneable by over 20 parameters, including:
-\begin{description}
-	\item[Seed] Allows levels to be recreated.
-	\item[Difficulty] Controls the complexity of the level, e.g. pit size, height change.
-	\item[Creatures] Controls presence and numbers of specific enemies.
-	\item[Length] Controls the length of the level.
-\end{description}
-This not only allows for many algorithms to learn from the same data set, useful for evaluation and comparison (a draw back from truly random generation), it also allows algorithms to learn of a particular flavour of level, e.g. short difficult levels with many enemies. \cite[p.~4-5]{2012the}
-
-\subsubsection{Sensory API}
-
-The benchmark provides the \emph{Environment} interface. This acts as the source of sensory information for the agent. It includes:
-\begin{itemize}
-	\item A 22x22 receptive field, representing the game screen, which encodes whether or not an enemy, a block or terrain is present in that square.
-	\item A list of enemy positions (on the visible screen) with pixel resolution.
-	\item State information about Mario, e.g. current state (\emph{small}, \emph{big}, \emph{fire}), is on the ground, is able to jump etc.
-\end{itemize}
-
-\subsubsection{Agent API}
-
-Controlling an agent constitutes implementing the \emph{Agent} interface, the core if which is the \emph{getAction} method.
-
-\smallskip
-\begin{lstlisting}[language=Java]
-public interface Agent {
-	boolean[] getAction();
-	void integrateObservation(Environment environment);
-	...	
-}
-\end{lstlisting}
-
-The returned boolean array maps to key presses (in array order): [$\leftarrow$] - Move left, [$\rightarrow$] - Move right, [$\downarrow$] - Duck, [\textbf{A}] - Jump (if possible), [\textbf{B}] - Run (if combined with moving left or right) and/or shoot fireball (when in \emph{fire} state). 
-Any combination of these is allowed.
-
-The \emph{integrateObservation} method is entry point for the sensory information for the agent.
-
-\subsection{Competition Scoring}
-
-The scoring mechanism is included in the Mario AI Benchmark software. The 2009 variant is contained in the \emph{CompetitionScore} class and the 2010 variant in the \emph{GamePlayTrack} class. Each scorer takes in a seed to initialise the levels used.
-
-In 2009, the Gameplay track was scored by agents playing 40 unseen levels with total distance travelled being the competition score. Tie-breakers were settled on game-time, number of kills, Mario's state at the end of each level.
-
-The 2010 competition's primarily addition was increased difficultly of levels (in terms of complexity, pit size, number of enemies etc.), which may include dead-ends (where the agent must back-track to continue). It also increased the number of levels played to 512.
-
-
-\subsection{Suitability to Reinforcement Learning}
+\paragraph{Suitability to Reinforcement Learning}
 
 The aforementioned level generation and speed-up properties of the Mario benchmark makes it a great testbed for reinforcement learning. The ability to learn from large sets of diverse data makes learning a much more effective technique. \cite[p.~3]{2012the}
 
 Besides that, the Mario benchmark presents an interesting challenge for reinforcement learning algorithms. Despite only a limited view of the ``world" at any one time the state and observable space is still of quite high-dimension. Though not to the same extent, so too is the action space. Any combination of five key presses per timestep gives a action space of $2^5$ \cite[p.~3]{2012the}. Hence part of the problem when implementing a learning algorithm for the Mario benchmark is reducing these search spaces. This has the topic of papers by Handa \cite{handa} and Ross and Bagnell \cite{rossbagnell}.
 
 Lastly, there is a considerable learning curve associated with Mario. The simplest levels could easily be solved by agents hard coded to jump when they reach an obstruction, whereas difficult levels require complex and varied behaviour. For example, traversing a series of pits may require a well placed series of jumps, or passing a group of enemies may require careful timing. Furthermore, considerations such as score, or the need to backtrack from a dead-end greatly increase the complexity of the problem. \cite[p.~3, p.~12]{2012the}
+
 
 \subsection{Previous Agents}
 
@@ -597,6 +553,13 @@ Work will begin on June 10th, and run until the 14th of September, when the repo
 \bibitem{2kbot}
   \emph{The 2K BotPrize},
   \url{http://botprize.org/}
+  
+\bibitem{starcomp}
+  Michael Buro, David Churchill,
+  \emph{Real-Time Strategy Game Competitions},
+  Association for the Advancement of Artificial Intelligence, AI Magazine, pp.~106-108,
+  \url{https://skatgame.net/mburo/ps/aaai-competition-report-2012.pdf},
+  2012.
   
 \bibitem{imb}
   \emph{Infinite Mario Bros.},
