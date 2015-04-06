@@ -113,7 +113,7 @@ Placeholder.
 
 Artificial intelligence (AI) is a core tenant of video games, traditionally utilised as adversaries or opponents to human players. Likewise, game playing has long been a staple of AI research. However, academic research has traditionally focused mostly on board and card games and advances in game AI and academic AI have largely remained distinct.
 
-The primary focus of game AI is enhance the experience and entertain. Investing time and resources into advanced AI research is infeasible and wasteful when simpler systems act well (if not perfectly). Furthermore, the games industry is driven by users, most of whom are not interested in advanced AI techniques.\cite{myangelcafe}
+The primary focus of game AI is enhance the experience and entertain. Investing time and resources into advanced AI research is infeasible and wasteful when simpler systems are deemed to act proficiently. \cite{myangelcafe}
 
 The first video game opponents were simple rule-based, discrete algorithms, such as the computer paddle in \emph{Pong}. In the late 1970s video game AIs became more advanced, utilising search algorithms and reacting to user input. In \emph{Pacman}, the ghost displayed distinct personalities and worked together against the human player \cite{pacmanghosts}. In the mid 90s, Finite State Machines (FSMs) emerged as a dominant game AI technique, as seen in games like \emph{Half-Life} \cite{halflife}. Later, in the 2000s, Behaviour Trees gained preeminence, as seen in games such as \emph{F.E.A.R.} \cite{fear} and \emph{Halo 2} \cite{halo}. These later advances borrowed little from contemporary development in academic AI and remained localised to the gaming industry.
 
@@ -142,7 +142,7 @@ At this point it is useful to introduce some high level descriptions/definitions
 \subsubsection{Game Specific}
 
 \paragraph{Rulesets}
-[TODO] [Is this needed?]
+[TODO] 
 
 \paragraph{Behaviour Trees (BTs)}
 
@@ -158,7 +158,7 @@ Nodes of the tress can either be \emph{control} nodes or \emph{leaf} nodes. \emp
 	\item[Offline] An offline (or batch) learner trains on an entire dataset before applying changes. 
 	\item[Online] A online learner reacts/learns from data immediately after each datapoint.
 \end{description} 
-(reference?)
+[reference]
 
 \paragraph{Reinforcement Learning}
 
@@ -246,18 +246,34 @@ Infinite Mario Bros (IMB) \cite{imb} is an open-source clone of Super Mario Bros
 
 The competitions adaptation of IMB (known henceforth as the `benchmark') incorporates a tuneable level generator and allows for the game to sped-up. This makes it a great testbed for reinforcement learning. The ability to learn from large sets of diverse data makes learning a much more effective technique. \cite[p.~3]{2012the}
 
-Besides that, the Mario benchmark presents an interesting challenge for reinforcement learning algorithms. Despite only a limited view of the ``world" at any one time the state and observable space is still of quite high-dimension. Though not to the same extent, so too is the action space. Any combination of five key presses per timestep gives a action space of $2^5$ \cite[p.~3]{2012the}. Hence part of the problem when implementing a learning algorithm for the Mario benchmark is reducing these search spaces. This has the topic of papers by Handa \cite{handa} and Ross and Bagnell \cite{rossbagnell}.
+Besides that, the Mario benchmark presents an interesting challenge for reinforcement learning algorithms. Despite only a limited view of the ``world" at any one time the state and observable space is still of quite high-dimension. Though not to the same extent, so too is the action space. Any combination of five key presses per timestep gives a action space of $2^5$ \cite[p.~3]{2012the}. Hence part of the problem when implementing a learning algorithm for the Mario benchmark is reducing these search spaces. This has the topic of papers by Handa and Ross and Bagnell \cite{rossbagnell} separately addressed this issue in their papers \cite{handa} and \cite{rossbagnell} respectively.
 
 Lastly, there is a considerable learning curve associated with Mario. The simplest levels could easily be solved by agents hard coded to jump when they reach an obstruction, whereas difficult levels require complex and varied behaviour. For example, traversing a series of pits may require a well placed series of jumps, or passing a group of enemies may require careful timing. Furthermore, considerations such as score, or the need to backtrack from a dead-end greatly increase the complexity of the problem. \cite[p.~3, p.~12]{2012the}
 
 
-\subsection{Agent-based Approaches}
+\subsection{Agent-based Game AI}
 \label{ssec:prevagents}
+
+This section will contain a brief analysis of previous agent-based game AIs that utilise reinforcement learning. Agent is used here to describe AI that plays the game as a human would, either as an opponent or a replacement. Most examples come from the recent game AI competitions, however some can be found in commercial games. Table \ref{tab:agents} summarises some examples.
+
+\subsubsection{Overview}
+
+Many 
+
+\subsubsection{Evolutionary Learning}
+
+\subsubsection{REALM}
+
+The REALM agent, developed by Slawomir Bojarski and Clare Bates Congdon, was the winner of the 2010 Mario AI competition, in both the unseen and learning Gameplay tracks. REALM stands for \textbf{R}ule Based \textbf{E}volutionary Computation \textbf{A}gent that \textbf{L}earns to Play \textbf{M}ario. REALM went through two versions (V1 and V2), with the second being the agent submitted to the 2010 competition. 
+
+The REALM agent utilised a Genetic Algorithm to evolve a rule set. In V1 these rules mapped conditions directly to key presses each time step. V2 adopted a two tier system. First, rules mapped conditions high-level behaviour. Second, the desired behaviour and the current environment was modelled as a search problem to produce the required key-presses. \cite{realm}
+
+The ruleset developed from REALM V2 was entered into the 2010 unseen Gameplay track. It not only scored the highest overall score, but also highest number of kills and was never disqualified (by getting stuck in a dead-end). Competition organisers note that REALM dealt with the more difficult levels better than other entrants. \cite[p.~10]{2012the}
 
 \begin{table}[t]
   \begin{adjustwidth}{-4cm}{-4cm}
   \begin{center} \small
-    \begin{tabular}{ | p{2cm} | p{4cm} | p{9cm} |}
+    \begin{tabular}{ | >{\raggedright}p{3cm} | >{\raggedright}p{4cm} | p{8cm} |}
     \hline
     \textbf{Name} & \textbf{Game/Competition} & \textbf{Approach} \TBstrut \\ \thickhline
     
@@ -269,7 +285,7 @@ Lastly, there is a considerable learning curve associated with Mario. The simple
     Grammatical evolution with a GA to develop behaviour trees. 
     \\ \hline
     M. Erickson \cite{2012the} & 2009 Mario AI Competition &
-    A crossover heavy GA to evolve expression tree.
+    A crossover heavy GA to evolve an expression tree.
     \\ \hline
     City Conquest \cite{evolutioningamedesign} & City Conquest In Game AI &
     GAs to evolve build plans.
@@ -303,28 +319,21 @@ Lastly, there is a considerable learning curve associated with Mario. The simple
     Online reinforcement learning to avoid repeating mistakes and crashes.
     \\ \hline
     Berkeley Overmind \cite{overmind} & The Starcraft AI Competition &
-    Reinforcement learning to tune parameters to potential field and A* search.
+    Reinforcement learning to tune parameters for potential field and A* search.
+    \\ \hline
+    Black \& White \cite{blackandwhite} & Black \& White's Creature AI &
+    Reinforcement Learning applied to a neural network representing the creatures desire.
     \\ \hline
     Project Gotham Racing (PGR) \cite{projectgothamracing} & PGR In-game AI &
     Reinforcement learning to optomise racing lines.
-     \\ \thickhline
+     \\ \hline
     
     \end{tabular}
   \end{center}
   \end{adjustwidth}
-  \caption{This table summarises agent based approaches to Game AI, utilising learning}
+  \caption{This table summarises learning based agent approaches to game AI}
   \label{tab:agents}
 \end{table}
-
-\subsubsection{Overview}
-
-\subsubsection{REALM}
-
-The REALM agent, developed by Slawomir Bojarski and Clare Bates Congdon, was the winner of the 2010 Mario AI competition, in both the unseen and learning Gameplay tracks. REALM stands for \textbf{R}ule Based \textbf{E}volutionary Computation \textbf{A}gent that \textbf{L}earns to Play \textbf{M}ario. REALM went through two versions (V1 and V2), with the second being the agent submitted to the 2010 competition. 
-
-The REALM agent utilised a Genetic Algorithm to evolve a rule set. In V1 these rules mapped conditions directly to key presses each time step. V2 adopted a two tier system. First, rules mapped conditions high-level behaviour. Second, the desired behaviour and the current environment was modelled as a search problem to produce the required key-presses. \cite{realm}
-
-The ruleset developed from REALM V2 was entered into the 2010 unseen Gameplay track. It not only scored the highest overall score, but also highest number of kills and was never disqualified (by getting stuck in a dead-end). Competition organisers note that REALM dealt with the more difficult levels better than other entrants. \cite[p.~10]{2012the}
 
 
 %-----------------------------
@@ -510,9 +519,16 @@ The approach to this objective will once again draw inspiration from REALM.
 
 \subsubsection{Previous Agents}
 
-[More specific on REALM evolutions and mention Agent Smith, which also evolved a ruleset (fitness function tuned to play style)]
+REALM starts with a random ruleset and evolves it using a GA over 1000 generations. The best performing rule set from the final generation was chosen to act as the agent for the competition. Hence, REALM is an agent focused on offline learning.  \cite[pp.~87-89]{realm}
+\begin{description}
+	\item[Population] Populations have a fixed size of 50 individuals, with each individual being a rule set. Each rule represents a genome and each individual has 20. Initially rules are randomised, with each condition having a 40\%, 30\%, 30\% chance to be DONT\_CARE, TRUE, FALSE respectively.
 
+	\item[Fitness] Individuals are evaluated by running through 12 different levels. The fitness of an individual is a modified score, averaged over the levels. Score focuses on distance, completion of level, Mario's state at the end and number of kills. Each level an individual plays increases in difficulty. Levels are predictably generated, with the seed being recalculated at the start of each generation. This is to avoid over-fitting and to encourage more general rules.
 
+	\item[Breeding] The breeding phase takes the five best individuals from the population and produces 9 offspring each. These parents are then also included in the next generation. Offspring are exposed to: \textbf{Mutation}, where rule conditions and actions may change value; \textbf{Crossover}, where a rule from one child may be swapped with a rule from another child and \textbf{Reordering}, where rules are randomly reordered. These occur with probabilities of 10\%, 10\% and 20\% respectively.
+\end{description}
+
+Another source of inspiration is R. Small's paper on an agent that plays Unreal Tournament \cite{agentsmith}. Small used a GA to evolve a simplistic ruleset. The fitness function of the GA was tuned specifically to distil characteristics on the agent, in this case aggressiveness.
 
 \subsection{Objective \ref{obj:expand}: Agent Extension}
 \label{meth:expand}
@@ -563,29 +579,29 @@ The agent will also be assessed by the increase in fitness over time during lear
 
 Work will begin on June 10th, and run until the 14th of September, when the report will be submitted. The writing of the report will be a continual process over the 96 days.
 
-\subsection*{June 10th -- July 10st}
+\subsection{Phase 1}
+\subsubsection*{June 10th -- July 10th}
 \begin{description}
-	\item[3 days] Integration of the existing Java codebase with the Scala language.
-	\item[14 days] Rule set interpretation testing and implementation, including the creation of a hand-made agent.
-	\item[14 days] Evolutionary Methods library integration and learning set-up.
+	\item[4 days] Integration of the existing Java codebase with the Scala language and introduction of testing and build tools (as discussed in \ref{meth:software})
+	\item[10-12 days] Environment-condition translation scheme testing and implementation (as discussed in \ref{meth:cond}).
+	\item[10-12 days] Rule set interpretation testing and implementation (as discussed in \ref{meth:handcraft}).
+	\item[2 days] Construction of the handcrafted AI.
 \end{description}
 
-\subsection*{July 1st -- September 7th}
-\begin{itemize}
-	\item Decision on conditions to be used for rule sets and their translation from the \emph{Environment} interface.
-	\item Experimentation and assessment of evolutionary methods to evolve rulesets. This may include reassessing conditions.
-	\item Possible expansions as spelled out in subsection \ref{subset:projexpand}.
-\end{itemize}
+\subsection{Phase 2}
+\subsubsection*{July 10th -- September 7th}
+\begin{description}
+	\item[12 days] Integration of the evolutionary learning library with the benchmark software as described in \ref{meth:rlfw}.
+	\item[30-40 days] Experimentation and assessment of evolutionary methods to evolve rulesets, including revisiting the condition scheme (Section \ref{meth:explolearn}).
+	\item[20-10 days] Investigating possible extensions of the agent as spelled out in \ref{meth:expand}.
+\end{description}
 
-\subsection*{August 24th -- September 7th}
-\begin{itemize}
-	\item Evaluation of agent(s) as specified in subsection \ref{subsec:projeval}.
-\end{itemize}
-
-\subsection*{September 7th -- September 14th}
-\begin{itemize}
-	\item Finishing touches to the project report.
-\end{itemize}
+\subsection{Phase 3}
+\subsubsection*{August 24th -- September 14th}
+\begin{description}
+	\item[14 days] Evaluation of agent(s) as specified in \ref{meth:eval}.
+	\item[7 days] Finishing touches to the project report.
+\end{description}
 
 
 
