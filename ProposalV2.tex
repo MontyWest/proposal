@@ -254,13 +254,26 @@ Lastly, there is a considerable learning curve associated with Mario. The simple
 \subsection{Agent-based Game AI}
 \label{ssec:prevagents}
 
-This section will contain a brief analysis of previous agent-based game AIs that utilise reinforcement learning. Agent is used here to describe AI that plays the game as a human would, either as an opponent or a replacement. Most examples come from the recent game AI competitions, however some can be found in commercial games. Table \ref{tab:agents} summarises some examples.
+This section will contain a brief analysis of previous game-playing AIs, referred to in this report as `agents', that utilise reinforcement learning. Agents play the game as a human would, either as an opponent or a replacement. Most examples come from the recent game AI competitions, however some can be found in commercial games. Table \ref{tab:agents} summarises some examples. 
 
-\subsubsection{Overview}
-
-Many 
+[TODO: Not sure what I need to say in this subsection]
 
 \subsubsection{Evolutionary Learning}
+\begin{itemize}
+	\item Many agent AI use evolutionary methods.
+	\item Due to stochastic nature, giving unexpected solution, somehow rid to human learning.
+	\item Most search spaces are non-continuous, difficult to search over.
+	\item Approaches over one game tend to vary widely, but difference in approaches between games/genres is surprising small 
+\end{itemize}
+
+\subsubsection{Hybrids}
+
+\begin{itemize}
+	\item Many approaches use elements of traditional Game AI (A*, BTs...).
+	\item In fact many of the best (comp winners) do so.
+	\item Micro actions: Tradional | Macro actions: Learning/Evolution
+\end{itemize}
+
 
 \subsubsection{REALM}
 
@@ -591,9 +604,9 @@ Work will begin on June 10th, and run until the 14th of September, when the repo
 \subsection{Phase 2}
 \subsubsection*{July 10th -- September 7th}
 \begin{description}
-	\item[12 days] Integration of the evolutionary learning library with the benchmark software as described in \ref{meth:rlfw}.
-	\item[30-40 days] Experimentation and assessment of evolutionary methods to evolve rulesets, including revisiting the condition scheme (Section \ref{meth:explolearn}).
-	\item[20-10 days] Investigating possible extensions of the agent as spelled out in \ref{meth:expand}.
+	\item[20 days] Integration of the evolutionary learning library with the benchmark software as described in \ref{meth:rlfw}.
+	\item[10-30 days] Experimentation and assessment of evolutionary methods to evolve rulesets, including revisiting the condition scheme (Section \ref{meth:explolearn}).
+	\item[10-30 days] Investigating possible extensions of the agent as spelled out in \ref{meth:expand}.
 \end{description}
 
 \subsection{Phase 3}
