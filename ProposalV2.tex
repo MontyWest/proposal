@@ -139,7 +139,7 @@ Reinforcement learning has long been a staple of academic research into AI and D
 
 At this point it is useful to introduce some high level descriptions/definitions of some concepts key to this project.
 
-\subsubsection{Game Specific}
+\subsubsection{Traditional Game AI}
 
 \paragraph{Rulesets}
 [TODO] 
@@ -169,7 +169,9 @@ A reinforcement learning agent focuses on a learning problem, with it's goal to 
 
 Genetic Algorithms are an subset of Evolutionary Methods and model the solution as a \emph{population} of \emph{individuals}. Each \emph{individual} has a set of \emph{chromosomes}, which can be thought of as simple pieces of analogous information (most often in the form of bit strings). Each \emph{individual} is assessed by some \emph{fitness function}. This assessment is used to cull the \emph{population}, akin to survival of the fittest. Then a new \emph{population} is created (possibly containing the fittest from the previous \emph{population}) using \emph{crossover} of \emph{chromosomes} from two (or more) \emph{individuals} (akin to sexual reproduction), \emph{mutation} of \emph{chromosomes} from one \emph{individual} (akin to asexual reproduction) and \emph{re-ordering} of  \emph{chromosomes}. Each new  \emph{population} is called a \emph{generation}. \cite[p.~7]{mitchellga}
 
-\paragraph{Grammatical Evolution (GE)}
+\paragraph{Grammatical Evolution (GE)} 
+
+[Not sure this is needed anymore, only mentioned in table briefly]
 
 The solution in Grammatical Evolution is a program or program fragment. This program is described by a context-free grammar. The search space of the problem consists of integer strings, which are normally evolved using a GA. These integer strings encode a program tree using the context-free grammar. Decoding starts with the start symbol or expression and continues with the left most nonterminal. Imagining each symbol has an ordered list of possible choices, the next integer in the string is calculated modulo the length of the choice list, this value is then the index of the symbol's replacement. This continues until the grammar is in a terminal state. \cite{gramev}
 
@@ -201,28 +203,24 @@ Some brief details of the competitions which are of relevance to this project ar
 \begin{table}[t]
   \begin{adjustwidth}{-4cm}{-4cm}
   \begin{center} \small
-    \begin{tabular}{ | p{2cm} | p{3cm} | p{10cm} |}
+    \begin{tabular}{ | >{\raggedright}p{2cm} | >{\raggedright}p{3cm} | p{10cm} |}
     \hline
     \textbf{Genre} & \textbf{Game} & \textbf{Description} \TBstrut \\ \thickhline
     
-    \multicolumn{3}{| l |}{\emph{\textbf{ The Simulated Car Racing Competition}}} \Tstrut \\ \hline
     Racing & TORCS (Open-source) \cite{torcs} &
-    Competitors enter drivers, that undergo races against other entrants which include qualifying and multi-car racing. The competition encourages the use of learning techniques (but doesn't ban non-learning agents). \cite{scrc} 
+    \textbf{The Simulated Car Racing Competition} Competitors enter drivers, that undergo races against other entrants which include qualifying and multi-car racing. The competition encourages the use of learning techniques (but doesn't ban non-learning agents). \cite{scrc} 
      \\ \thickhline
     
-    \multicolumn{3}{| l |}{\emph{\textbf{ The 2K BotPrize}}} \Tstrut \\ \hline
     First Person Shooter (FPS) & Unreal Tournament 2004 &
-    Competitors enter `bots' that play a multi-player game against a mix of other bots and humans. Entrants are judged on Turing test basis, where a panel of judges attempt to identify the human players. \cite{2kbot}
+    \textbf{The 2K BotPrize} Competitors enter `bots' that play a multi-player game against a mix of other bots and humans. Entrants are judged on Turing test basis, where a panel of judges attempt to identify the human players. \cite{2kbot}
      \\ \thickhline
     
-    \multicolumn{3}{| l |}{\emph{\textbf{ The Starcraft AI Competition}}} \Tstrut \\ \hline
     Real Time Strategy (RTS) & Starcraft &
-    Competitors play against each other in a 1 on 1 knockout style tournament. Implementing an agent involves solving both micro objectives, such as path-planning, and macro objectives, such as base progression. \cite{starcomp}
+    \textbf{The Starcraft AI Competition} Competitors play against each other in a 1 on 1 knockout style tournament. Implementing an agent involves solving both micro objectives, such as path-planning, and macro objectives, such as base progression. \cite{starcomp}
      \\ \thickhline
     
-   \multicolumn{3}{| l |}{\emph{\textbf{ The Mario AI Competition}}} \Tstrut \\ \hline
     Platformer & Infinite Mario Bros (Open-source) &
-    Competitors submit agents that attempt to play (as a human would) or create levels. The competition is split into `tracks', including Gameplay, Learning, Turing and Level Generation. In Gameplay, each agent must play unseen levels, earning a score, which is compared to other entrants. \cite{2012the}
+    \textbf{The Mario AI Competition} Competitors submit agents that attempt to play (as a human would) or create levels. The competition is split into `tracks', including Gameplay, Learning, Turing and Level Generation. In Gameplay, each agent must play unseen levels, earning a score, which is compared to other entrants. \cite{2012the}
      \\ \hline
     
     \end{tabular}
