@@ -10,6 +10,8 @@
 \usepackage{multirow}
 \usepackage{chngpage}
 \usepackage{array}
+\usepackage{pbox}
+
 
 
 \lstset{basicstyle=\footnotesize\ttfamily, columns=fullflexible}
@@ -208,28 +210,24 @@ Over the last few years several game based AI competitions have begun, over a va
 
 Some brief details of the competitions which are of relevance to this project are compiled in to Table \ref{tab:gameaicomp}. The Mario AI Competition is also explored in more detail below.
 
-\begin{table}[t]
+\begin{table}
   \begin{adjustwidth}{-4cm}{-4cm}
   \begin{center} \small
     \begin{tabular}{ | >{\raggedright}p{2cm} | >{\raggedright}p{3cm} | p{10cm} |}
     \hline
     \textbf{Genre} & \textbf{Game} & \textbf{Description} \TBstrut \\ \thickhline
-    
-    Racing & TORCS (Open-source) \cite{torcs} &
-    \textbf{The Simulated Car Racing Competition} Competitors enter agent drivers, that undergo races against other entrants which include qualifying and multi-car racing. The competition encourages the use of learning techniques. \cite{scrc} 
-     \\ \thickhline
-    
+    Racing & TORCS (Open-source) \cite{torcs} &  
+    \pbox{10cm}{\smallskip  \textbf{The Simulated Car Racing Competition}\\ Competitors enter agent drivers, that undergo races against other entrants which include qualifying and multi-car racing. The competition encourages the use of learning techniques. \cite{scrc} \smallskip}
+      \\ \hline
     First Person Shooter (FPS) & Unreal Tournament 2004 &
-    \textbf{The 2K BotPrize} Competitors enter `bots' that play a multi-player game against a mix of other bots and humans. Entrants are judged on Turing test basis, where a panel of judges attempt to identify the human players. \cite{2kbot}
-     \\ \thickhline
-    
+    \pbox{10cm}{\smallskip \textbf{The 2K BotPrize} Competitors enter `bots' that play a multi-player game against a mix of other bots and humans. Entrants are judged on Turing test basis, where a panel of judges attempt to identify the human players. \cite{2kbot} \smallskip}
+       \\ \hline
     Real Time Strategy (RTS) & Starcraft &
-    \textbf{The Starcraft AI Competition} Agents play against each other in a 1 on 1 knockout style tournament. Implementing an agent involves solving both micro objectives, such as path-planning, and macro objectives, such as base progression. \cite{starcomp}
-     \\ \thickhline
-    
+    \pbox{10cm}{\smallskip \textbf{The Starcraft AI Competition} Agents play against each other in a 1 on 1 knockout style tournament. Implementing an agent involves solving both micro objectives, such as path-planning, and macro objectives, such as base progression. \cite{starcomp} \smallskip}
+       \\ \hline
     Platformer & Infinite Mario Bros (Open-source) &
-    \textbf{The Mario AI Competition} Competitors submit agents that attempt to play (as a human would) or create levels. The competition is split into `tracks', including Gameplay, Learning, Turing and Level Generation. In Gameplay, each agent must play unseen levels, earning a score, which is compared to other entrants. \cite{2012the}
-     \\ \hline
+    \pbox{10cm}{\smallskip \textbf{The Mario AI Competition} Competitors submit agents that attempt to play (as a human would) or create levels. The competition is split into `tracks', including Gameplay, Learning, Turing and Level Generation. In Gameplay, each agent must play unseen levels, earning a score, which is compared to other entrants. \cite{2012the} \smallskip}
+       \\ \hline
     
     \end{tabular}
   \end{center}
@@ -237,8 +235,6 @@ Some brief details of the competitions which are of relevance to this project ar
   \caption{This table summarises some recent game AI competitions \cite{2014how}}
   \label{tab:gameaicomp}
 \end{table}
-	
-
 
 \subsubsection{The Mario AI Competition}
 
@@ -314,53 +310,50 @@ The REALM V1 agent saw a larger improvement over the evolution, but only scored 
 
 The ruleset developed from REALM V2 was entered into the 2010 unseen Gameplay track. It not only scored the highest overall score, but also highest number of kills and was never disqualified (by getting stuck in a dead-end). Competition organisers note that REALM dealt with the more difficult levels better than other entrants. \cite[p.~10]{2012the}
 
+
 \begin{table}
   \begin{adjustwidth}{-4cm}{-4cm}
   \begin{center} \small
-    \begin{tabular}{ | >{\raggedright}p{3cm} | >{\raggedright}p{4cm} | p{8cm} |}
+    \begin{tabular}{ | >{\raggedright}p{3cm} | >{\raggedright}p{3.5cm} | p{8.5cm} |}
     \hline
     \textbf{Name} & \textbf{Game/Competition} & \textbf{Approach} \TBstrut \\ \thickhline
     
+    M. Erickson \cite{2012the} & 2009 Mario AI Competition &
+    A crossover heavy GA to evolve an expression tree.
+    \\ \hline
+    S. Polikarpov \cite[p.~7]{2010the} & 2009-10 The Mario AI Competition &
+    Reinforcement Learning to train a neural network with action sequences as neurons.
+    \\ \hline
     REALM \cite{realm} & 2010 Mario AI Competition &
     GA to evolve rulesets mapping environment to high-level behaviour.
     \\ \hline
     D. Perez et al \cite{gramev} & 2010 Mario AI Competition &
     Grammatical evolution with a GA to develop behaviour trees. 
     \\ \hline
-    M. Erickson \cite{2012the} & 2009 Mario AI Competition &
-    A crossover heavy GA to evolve an expression tree.
-    \\ \hline
-    City Conquest \cite{evolutioningamedesign} & City Conquest In Game AI &
-    GAs to evolve build plans.
-    \\ \hline
-    Agent Smith \cite{agentsmith} & Unreal Tournament 3 &
-    GAs to evolve very simple rulesets, which determine basic bot behaviour.
-     \\ \hline
-    
     FEETSIES \cite{feetsies} & 2010 Mario AI Competition &
     ``Cuckoo Search via L\'evy Flights" to develop a ruleset mapping an observation grid to actions. 
     \\ \hline
     COBOSTAR \cite[p.~136]{scrc} & 2009 Simulated Car Racing Competition &
     Covariance matrix adaptation evolution strategy to map sensory information to target angle and speed.
+    Online reinforcement learning to avoid repeating mistakes and crashes.
     \\ \hline
     L. Cardamone \cite[p.~137]{scrc} & 2009 Simulated Car Racing Competition &
     Neuroevolution to develop basic driving behaviour.
     \\ \hline
+    Agent Smith \cite{agentsmith} & Unreal Tournament 3 &
+    GAs to evolve very simple rulesets, which determine basic bot behaviour.
+     \\ \hline
     UT$\wedge$2 \cite{2kbot} & 2013 2K Botprize &
     Neuroevolution with a fitness function focused on being `human-like'.
     \\ \hline
     T. Sandberg \cite{emapf} & Starcraft &
     Evolutionary algorithms to tune potential field parameters.
      \\ \hline
-    
-    S. Polikarpov \cite[p.~7]{2010the} & The Mario AI Competition &
-    Reinforcement Learning to train a neural network with action sequences as neurons.
-    \\ \hline
-    COBOSTAR \cite[p.~136]{scrc} & 2009 Simulated Car Racing Competition &
-    Online reinforcement learning to avoid repeating mistakes and crashes.
-    \\ \hline
     Berkeley Overmind \cite{overmind} & The Starcraft AI Competition &
     Reinforcement learning to tune parameters for potential field and A* search.
+    \\ \hline
+    City Conquest \cite{evolutioningamedesign} & City Conquest In Game AI &
+    GAs to evolve build plans.
     \\ \hline
     Black \& White \cite{blackandwhite} & Black \& White's Creature AI &
     Reinforcement Learning applied to a neural network representing the creatures desire.
