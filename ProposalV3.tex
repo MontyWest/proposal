@@ -86,7 +86,7 @@ source is explicitly acknowledged.}
 %------------------
 
 \begin{abstract}
-Placeholder.
+Artificial intelligence in video games has long shunned the use of machine learning in favour of a handcrafted approach. However, the recent rise in the use of video games as a benchmark for academic AI research has demonstrated interesting and successful learning approaches. This project aims to follow this research and explore the viability of a game-playing learning AI. This aim will be realised by implementing a evolutionary agent for a platform game based on Mario Bros. 3 and assessing the gains of the learning procedure.
 \end{abstract}
 
 \vspace{10mm}
@@ -176,7 +176,6 @@ Nodes of the tress can either be \emph{control} nodes or \emph{leaf} nodes. \emp
 	\item[Offline] An offline (or batch) learner trains on an entire dataset before applying changes. 
 	\item[Online] A online learner reacts/learns from data immediately after each datapoint.
 \end{description} 
-[reference]
 
 \subsubsection{Reinforcement Learning}
 
@@ -319,6 +318,9 @@ The ruleset developed from REALM V2 was entered into the 2010 unseen Gameplay tr
     M. Erickson \cite{2012the} & 2009 Mario AI Competition &
     A crossover heavy GA to evolve an expression tree.
     \\ \hline
+    E. Speed \cite{2010the} & 2009 Mario AI Competition &
+    GA to evolve grid-based rulesets. Ran out of memory during competition.
+    \\ \hline
     S. Polikarpov \cite[p.~7]{2010the} & 2009-10 The Mario AI Competition &
     Ontogenetic reinforcement learning to train a neural network with action sequences as neurons.
     \\ \hline
@@ -376,46 +378,41 @@ The ruleset developed from REALM V2 was entered into the 2010 unseen Gameplay tr
 
 \subsection{Aim}
 
-The aim of the project is to explore the use of reinforcement learning techniques in creating a game playing AI. This will be achieved by producing an agent that plays the Mario AI benchmark. The project will pose this as a learning problem and not as a search or planning problem.
+The aim of the project is to explore the use of reinforcement learning techniques in creating a game-playing agent-based AI. This will be achieved by producing an intelligent agent that plays the Mario AI benchmark. The project will pose this as a reinforcement learning problem.
 
 \subsection{Objectives}
 
 \begin{enumerate}
-	\item \label{obj:software}
-	\textbf{Benchmark Software} \\
-	Prepare the available Mario AI benchmark software for use in this project.
+	\item \label{obj:prep}
+	\textbf{Preparation} \\
+	Assess the available Mario benchmark software and carry out a feasibility study in regards to language, testing frameworks, build tools and logging.
 	
-	\item \label{obj:cond}
-	\textbf{Observation Space} \\
-	Design, implement and test a transformation strategy of the sensory information available from the benchmark into a manageable form.
+	\item \label{obj:design}
+	\textbf{Design} \\
+	Influenced by previous approaches, design an agent and a reinforcement learning procedure that can demonstrate meaningful improvement during learning.
 	
-	\item \label{obj:handcraft}
-	\textbf{Handcrafted Agent} \\
-	Design, implement and test a customisable handcrafted (non-learning) agent for the benchmark that utilises the strategy from Objective \ref{obj:cond}.
+	\item \label{obj:impl}
+	\textbf{Implementation} \\
+	Implement agent and learning designs in a modular, customisable and test-driven manner, utilising external libraries and features of the benchmark software.
 	
-	\item \label{obj:rlfw}
-	\textbf{Learning Framework} \\
-	Integrate a Reinforcement Learning framework into the software.
+	\item \label{obj:test}
+	\textbf{Testing} \\
+	Provide significant test coverage to the functionality of the implementation.
 	
-	\item \label{obj:explolearn}
-	\textbf{Agent Learning} \\
-	Explore use of learning to construct a procedure that evolves an agent using the hand-crafted version created in Objective \ref{obj:handcraft} as a template. 
-	
-	\item \label{obj:expand}
-	\textbf{Agent Extension} \\
-	Investigate expansion of the agent template into a two-tiered system, separating high-level and low-level behaviour.
+	\item \label{obj:learn}
+	\textbf{Learning} \\
+	Grant the agent a large and diverse testbed from which to learn as well as ample time and resources to do so.
 	
 	\item \label{obj:eval}
-	\textbf{Agent Evaluation} \\
-	Evaluate the fitness of the agent produced and the effectiveness of the learning process.
+	\textbf{Evaluation} \\
+	Evaluate both the competence and learning capability of the agent and compare to alternative approaches.
 
 \end{enumerate}
 
 \subsection{Limitations}
+\label{ssec:limits}
 
-It is unlikely that the final agent will be able to compete at the level of the Mario AI competition. Expansions and explorations into the template functionality of the agent will focus on increasing it's learning ability rather than it's final fitness. 
-
-Furthermore, due to time constraints and the exploratory nature of Objective \ref{obj:explolearn}, Objective \ref{obj:expand} will be seen as stretch goal, whose completion may not be fully realised at the end of the project. 
+It is unlikely that the final agent will be able to compete at the level of the previous Mario AI competitions. The focus of the project is on an effective learning procedure rather than pure attainment of the agent.
 
 
 %---------------------
@@ -424,57 +421,34 @@ Furthermore, due to time constraints and the exploratory nature of Objective \re
 \clearpage
 \section{Methodology}
 
-The project will attempt to customise and expand on the REALM V1 agent, with influence from other entrants to the 2010 Mario AI Competition, such as D. Perez et al. It will adhere to the following stipulations:
+The two central components to this project, the agent and the learning process, will be designed, implemented and tested as two separate modules. This presents a clean separation of concerns. The agent module will be completed first, followed by the learning module.
 
-\begin{itemize}
-	\item The agent will follow the rules of the 2010 Mario AI competition, which ban the use of reflection and limit access to classes within the software.
-	\item No simulation of the game engine to predict enemy movements. This technique has been used in the Mario AI competition, but isn't always applicable to a game AI challenge.
-\end{itemize}
+It is foreseeable that certain parts of the project will be exploratory and as such evaluation may inform a required redesign of the either the agent or the learning modules. Hence it will be important to take an agile and iterative approach to production.
 
-The agent will utilise offline reinforcement learning in the form of genetic programming. The evolution of the agent, and it's ability to play unseen levels will form the basis for it's evaluation.
+\subsection{Objective \ref{obj:prep}: Preparation}
+\label{meth:prep}
 
-\subsection{Objective \ref{obj:software}: Benchmark Software}
-\label{meth:software}
+The Mario benchmark software is open-source\footnote{Available at http://www.marioai.org/gameplay-track/getting-started} and will form the initial codebase for this project. It is written in Java and contains the game-engine and useful features such as level generation and level playing classes. It also provides an agent interface, which will act as the link between my agent module and the game-engine. 
 
-The intention is that Scala will be the main language of this project. The Mario AI benchmark is coded in Java. Given that Scala is backwards compatible with Java there should not be a significant time penalty in integrating these two languages. In the event that this proves impossible or counter productive the codebase will be updated to Java 8 instead. 
+I intend to use Scala as the main language of this project as I believe that it's functional and concurrent features will suit the problem. Scala and Java are widely compatible (as they both compile JVM bytecode) so this should no require a significant amount of work. However, the codebase will be assessed for the suitability of this approach, and Java 8 will be used if Scala proves to be counterproductive.
 
-Moreover, build tools such as \emph{sbt} or \emph{Maven} and testing frameworks such as \emph{Scala Mock} or \emph{Mockito} will be used.
+Furthermore the benchmark will be assessed for the inclusion of build tools, such as \emph{sbt} and \emph{Maven}; testing frameworks, such as \emph{ScalaMock} and \emph{Mockito} and logging, such as \emph{log4j} and Scala's inbuilt logging package.
 
-\subsection{Objective \ref{obj:cond}: Observation Space}
-\label{meth:cond}
+\subsection{Objective \ref{obj:design}: Design}
+\label{meth:design}
 
-As this project will adhere to the rules of the 2010 Mario AI competition, information about Mario and his surroundings is restricted and prescribed by the software.
+The design of both the agent and learning module will follow the approach of the REALM agent, discussed in \ref{ssec:realm}.
 
-\subsubsection{Mario Benchmark Sensory API}
+The agent module will be a rule-based system that maps environment based conditions to explicit key presses. This project will explore changing the conditions of REALM's V1 agent. The available sensory information will be assessed and will be distilled into a list custom conditions. As in REALM these will likely be simple binary values with ternary operators encoding preference in the rules, but other approaches will be considered.
 
-The benchmark provides the \emph{Environment} interface. This acts as the source of sensory information for the agent. The rules of the competition state that this is to be the only source of game information available to agents. It includes:
+The learning module will utilise an offline genetic algorithm with the same configuration seen in \ref{ssec:realm}. Rulesets will be individuals, with rules as genomes. Fitness of an individual will be determined by playing generated levels. However, different approaches to mutation, crossover and reordering procedures will explored, as well as careful consideration of calculating fitness from level playing statistics.
 
-\begin{itemize}
-	\item A 22x22 receptive field, representing the game screen, which encodes whether or not an enemy, a block or terrain is present in that square.
-	\item A list of enemy positions (on the visible screen) with pixel resolution.
-	\item State information about Mario, e.g. current state (\emph{small}, \emph{big}, \emph{fire}), is on the ground, is able to jump etc.
-\end{itemize}
+If time permits, a redesign of the agent, to incorporate a multi-tiered approach, will be explored. This will involve a reflection on previous approaches such as REALM V2 \cite{realm} and D. Perez et al. \cite{gramev}.
 
-\subsubsection{Previous Agents}
+\subsection{Objective \ref{obj:impl}: Implementation}
+\label{meth:impl}
 
-E. Speed's entry into the 2009 Mario AI Competition /cite[pp.~7-8]{2010the} demonstrated the importance of translating sensory information. His agent attempted to use the entire 22x22 grid as the observation space for his learning algorithm, which lead to his agent running out of memory during the competition. \cite[pp.~6-7]{2010the}
-
-REALM incorporated a simple but effective technique of translating the information available to a set of binary variables (and one ternary variable). For example, these included {\small MAY\_MARIO\_JUMP},  {\small IS\_PIT\_AHEAD} and {\small IS\_ENEMY\_CLOSE\_LOWER\_RIGHT}. This distilled the most important information in a way that significantly reduced the observation space, allowing for a more effective learning process. \cite[p.~85]{realm}
-
-\subsubsection*{Approach}
-
-The approach of transforming the \emph{Environment} interface into a manageable set of conditions will be adopted in this project. Due to the importance of this step, and it's effect over not only the core functionality of the agent, but also the learning process, Objective \ref{obj:cond} may be revisited often, especially during the Objectives \ref{obj:handcraft}, \ref{obj:explolearn} and \ref{obj:expand}.
-
-
-\subsection{Objective \ref{obj:handcraft}: Handcrafted Agent}
-\label{meth:handcraft}
-
-Once again it is important to look at the benchmark software, which provides a framework for creating agents.
-
-\subsubsection{Mario Benchmark Agent API}
-
-Creating an agent constitutes implementing the \emph{Agent} interface, the core of which is the \emph{getAction} method.
-
+The agent module will implement the \emph{Agent} interface including in the benchmark, which will allow for the agent to used in other areas of the benchmark software, such as the game-playing and evaluation classes.
 \smallskip
 \begin{lstlisting}[language=Java]
 public interface Agent {
@@ -484,123 +458,44 @@ public interface Agent {
 }
 \end{lstlisting}
 
-The returned boolean array maps to key presses (in array order): [$\leftarrow$] - Move left, [$\rightarrow$] - Move right, [$\downarrow$] - Duck, [\textbf{A}] - Jump (if possible), [\textbf{B}] - Run (if combined with moving left or right) and/or shoot fireball (when in \emph{fire} state). Any combination of these is allowed.
+The specific ruleset will be persisted external and loaded into memory on the startup of the agent module. The {\fontfamily{tt}\selectfont\small getAction()} method will be implemented as the semantic reasoner for the ruleset, returning a boolean array of key presses as prescribe by the chosen rule.
 
-The \emph{integrateObservation} method is entry point for the sensory information for the agent.
+The mapping of the sensory information to conditions will be handled by the {\fontfamily{tt}\selectfont\small integrateObservation()} method. The \emph{Environment} interface provides the sensory information to the agent. It includes a 22x22 grid charting terrain and box locations, pixel-resolution of enemy positions and information about Mario's state. As discussed in \ref{meth:design}, this will be simplified to a list of conditions, which will be stored in memory and compared to the ruleset by the semantic reasoner.
 
-The benchmark runs at  constant 25 frames per second (fps), which allows 40ms for the agent controller to decide on an action each time step.
+\vspace{\baselineskip}
 
-\subsubsection{Previous Agents}
+The learning module will utilise an external library alongside features of the benchmark software. Many evolutionary computation libraries exist for Java (and therefore Scala), \emph{ECJ} \cite{ecj} and \emph{JGAP} \cite{jgap} will both be considered for use in this project.
 
-REALM implemented their core agent as a ruleset, with rules stating a preference over conditions, resulting in an action. Rule preference over binary conditions are either TRUE, FALSE or DONT\_CARE \cite[p.~85]{realm}. Each time step a rule is chosen that best fits the current condition, with ties being settled by rule order  \cite[p.~86]{realm}. Actions in the first version (V1) were simply key-presses, whereas in version two (V2) they are high-level plans. The REALM V1 agent saw a larger improvement over the evolution, but only scored 65\% of the V2 agents score on average  \cite[pp.~89-90]{realm}.  
-
-
-\subsubsection*{Approach}
-
-The handcrafted AI will follow the ruleset approach. Rules will map conditions (as determined in Objective \ref{obj:cond}) to explicit key-press combinations as it has shown to be more greatly affected by the learning phase, and therefore is more fitting for this project's aim. Hence, the agent will be single tiered, where the result of following a rule is the result of the \emph{getAction} method. 
-
-Furthermore, rulesets will be handled abstractly by the \emph{Agent} interface. The details of a ruleset will be held externally to the interface in order to allow for customisation in the learning phase.
-
-The translation of the observable space to the set of conditions (developed in Objective \ref{obj:cond}) will be implemented into the \emph{integrateObservation} method.
-
-The aim of this handcrafted agent is not necessarily to perform well, but to offer a baseline agent for the learning process and for later comparison. With this in mind only minimal time will be taken in constructing the rules for the handcrafted agent, with more focus being aimed at the abstract implementation.
+The implementation will manage the integration of this library with both the agent module and the relevant features of the benchmark software. For the breeding phase it will  hold and edit several rulesets at a time. It will then inject these rulesets into an instance of the agent and pass it to sped-up level playing class in the benchmark. The statistics returned from that class will form the basis of the fitness function. This phase will also include generation of the levels. The breeding, fitness and level generation parameters will be held externally to allow for easy tuning, which will assist the agile approach of the project. Lastly, fitness results will be logged to provide a basis for evaluating the learning of the agent.
 
 
-\subsection{Objective \ref{obj:rlfw}: Learning Framework}
-\label{meth:rlfw}
+\subsection{Objective \ref{obj:test}: Testing}
+\label{meth:test}
 
-This project will focus on evolutionary methods as it's learning procedure. Evolutionary learning has seen many successes in agent-based AI approaches (as seen in \ref{ssec:prevagents}). Furthermore, the search space of this project is a ruleset, in which it is difficult to define the notion of a \emph{neighbour}. The concept of \emph{neighbours} is essential to many Reinforcement Learning techniques, such as Simulated Annealing. In this way, evolutionary methods are more easily applied to the non-continuous ruleset search space of this project as they are largely stochastic.
+Testing of the agent module will provided on two levels. Unit tests will be written to test the semantic reasoner and the environment observation methods. To achieve this, the Environment interface and rulesets will be mocked. Black-box integration tests will test the agent module as a whole. One focus of these tests will be response time, the benchmark game-engine runs at a constant 25fps, therefore the agent must respond within 40ms when deciding an action each time step.
 
-The integration of a learning framework must consider what is available in terms of external libraries and also what is offered from the benchmark software.
+Due to the stochastic nature of genetic algorithms, testing of the learning module will be limited. However, the breeding can be tested by verifying that children stay within parameters. Some evolutionary libraries, such as JGAP, provide several unit tests. If available these will become the primary source of test coverage for the module.
 
-\subsubsection{Libraries}
 
-There are several Genetic Programming libraries available for Java (and therefore Scala). This project will consider the use of two: ECJ \cite{ecj} and JGAP \cite{jgap}. The decision on which to use will be made on ease of inclusion and on features pertinent to this project.
+\subsection{Objective \ref{obj:learn}: Learning}
+\label{meth:design}
 
-\subsubsection{Mario Benchmark}
+Optimising parameters for the genetic algorithm will be an important stage of the project. Assessment of the parameters of previous agent such as REALM (discussed in \ref{realm}) D. Perez et al. \cite{gramev} and Agent Smith \ref{agent smith} will inform the initial values. From there learning module logs will be analysed for improvements. For example, if there is a lot of variation in fitness then perhaps mutation should be restricted, or if the average fitness of each generation does not eventually level out then the process should go on for longer.
 
-The Mario benchmark contains several useful features to encourage the use of learning techniques, below are the two most important.
+The design of the agent can also influence the effectiveness of the learning algorithm. The size of the search space is determined by the conditions and actions of the rulesets, the reduction of which could improve evolutionary capability. Hence, the learning phase of the project may inform a redesign of the agent, which is one of the main reasons this project will take an agile approach.
 
-\paragraph{Level Playing}
+The learning itself is likely to a time consuming, computationally heavy procedure. To assist in providing ample resources to this process the project will have access to two 
+8 core servers, as well as a laptop with an Intel i7 processor.
 
-The benchmark enables agents to play levels, returning important information about an agents performance on completion or death. This process can be automated and from a reinforcement learning perspective, form the basis of agent fitness.
 
-The software also allows for the reliance on the system clock to be turned off, as well as the rendering of the GUI. This allows for levels to be played several thousands times faster than otherwise. This is essential for implementing an effective learning strategy, as high numbers of playthroughs take minimal time.  \cite[p.~3]{2012the} 
-
-\paragraph{Tuneable Level Generator}
-
-Another essential element for effective learning is level generation, in lieu of the lack of a data set. The benchmark expands on the level generator from IMB, making it tuneable by over 20 parameters, including:
-\begin{description}
-	\item[Seed] Allows levels to be recreated.
-	\item[Difficulty] Controls the complexity of the level, e.g. pit size, height change.
-	\item[Creatures] Controls presence and numbers of specific enemies.
-	\item[Length] Controls the length of the level.
-\end{description}
-The level generator facilitates agents learning from many different levels and also allows agents to learn of a particular flavour of level, e.g. short difficult levels with many enemies. The \textbf{Seed} allows different agents to learn from the same data set, useful for evaluation and comparison (a draw back from truly random generation). \cite[p.~4-5]{2012the}
-
-\subsubsection*{Approach}
-
-A package will be created that ties the genetic programming library with the benchmark software, allowing it to access the level generation and level playing portions of the software for the purpose of fitness evaluation. Furthermore, the package will be able hold a population of rulesets, with the power modify them for the purpose of breeding. The parameters of level generation, fitness calculation and generation breeding will be easy to adjust, as it is important for Objective \ref{obj:explolearn}. The package will log results of each generation, which will be the basis of evaluating the learning process. Lastly, it will persist the last generation of rulesets, in order for one to be chosen as the final agent.
-
-\subsection{Objective \ref{obj:explolearn}: Agent Learning}
-\label{meth:explolearn}
-
-Objective \ref{obj:explolearn} is the first exploratory stage of the project and as such it is difficult to determine a specific approach. Most of the work done to reach this objective will be done planning and tuning the parameters of the learning framework.
-
-The approach to this objective will once again draw inspiration from REALM.
-
-\subsubsection{Previous Agents}
-
-REALM starts with a random ruleset and evolves it using a GA over 1000 generations. The best performing rule set from the final generation was chosen to act as the agent for the competition. Hence, REALM is an agent focused on offline learning.  \cite[pp.~87-89]{realm}
-\begin{description}
-	\item[Population] Populations have a fixed size of 50 individuals, with each individual being a rule set. Each rule represents a genome and each individual has 20. Initially rules are randomised, with each condition having a 40\%, 30\%, 30\% chance to be DONT\_CARE, TRUE, FALSE respectively.
-
-	\item[Fitness] Individuals are evaluated by running through 12 different levels. The fitness of an individual is a modified score, averaged over the levels. Score focuses on distance, completion of level, Mario's state at the end and number of kills. Each level an individual plays increases in difficulty. Levels are predictably generated, with the seed being recalculated at the start of each generation. This is to avoid over-fitting and to encourage more general rules.
-
-	\item[Breeding] The breeding phase takes the five best individuals from the population and produces 9 offspring each. These parents are then also included in the next generation. Offspring are exposed to: \textbf{Mutation}, where rule conditions and actions may change value; \textbf{Crossover}, where a rule from one child may be swapped with a rule from another child and \textbf{Reordering}, where rules are randomly reordered. These occur with probabilities of 10\%, 10\% and 20\% respectively.
-\end{description}
-
-Another source of inspiration is R. Small's paper on an agent that plays Unreal Tournament \cite{agentsmith}. Small used a GA to evolve a simplistic ruleset. The fitness function of the GA was tuned specifically to distil characteristics on the agent, in this case aggressiveness.
-
-\subsection{Objective \ref{obj:expand}: Agent Extension}
-\label{meth:expand}
-
-Objective \ref{obj:expand} is the second exploratory stage of the project. Time permitting, the goal here is to emulate the success shown by two-tier approaches, splitting high level behaviour from low level actions. The ruleset developed in the bulk of the project is a good basis for deciding high level behaviour, but a new approach may have to be investigated for the translation of this behaviour to low level actions. Furthermore, it is likely that Objective \ref{obj:cond} will have to be revisited.
-
-\subsubsection{Previous Agents}
-
-Approaching this objective will involving reassessing previous approaches and relevant literature. Two previous agents of immediate interest are REALM and D. Perez et al's agent. Both utilise the high-level low-level split and are documented well in their reviews \cite{realm} and \cite{gramev}.
-
-REALM V2 used a ruleset to decide on a general goal. This goal was passed to a simulator, which reassessed the environment and used A* to produce the explicit key-press combination. Not only did this change improve the agent by 65\%, it also reduced the search space of the learning algorithm \cite[pp.~85-87]{realm}. The creators also assert that the V2 agent was more interesting to watch, exhibiting more advanced and human-like behaviours \cite[pp.~89-90]{realm}. As previously mentioned, this agent won the 2010 competition with the most kills and no disqualifications \cite[p.~10]{2012the}. 
-
-D. Perez et al's approach uses Behaviour Trees, a common game AI approach to handling a behaviour-action split. Each behaviour tree is made up of subtrees that capture a specific goal. These are specifically made to be simplistic, comprised of condition nodes followed by action nodes. The process of Grammatical Evolution is used to evolve these behaviour trees, which are represented by a context-free grammar and encoded as integer strings. Although there was no use of search algorithms the agent was able to demonstrate planning behaviour \cite{gramev}. It finished 4th in the 2010 Mario AI Competition, with the second highest kill count and no disqualifications \cite[p.~10]{2012the}.
-
-\subsection{Objective \ref{obj:eval}: Agent Evaluation}
+\subsection{Objective \ref{obj:eval}: Evaluation}
 \label{meth:eval}
 
-Following the rules of the Mario AI Competition allows the agent to be evaluated in the same way as it's entrants. Furthermore, the evaluation used in the competition is available and adaptable.
+The benchmark software provides classes for evaluating agents. The best ruleset will be chosen from the final generation of the genetic algorithm and tested using the \emph{GamePlayTrack} class. Here the agent will play 512 unseen levels of varying type and difficulty. These levels are initiated by a seed, and therefore multiple agents can be scored on the same levels, which allows agents to be directly compared. Due to the limitations of the project discussed in \ref{ssec:limits}, editing this class to make the trial less demanding will be explored as it may produce a more useful evaluation.
 
-\subsubsection{Mario AI Competition Scoring}
+The primary comparison will be with a handcraft version of the agent, which will assess the significance of the agent evolution. Other comparisons can be drawn against agents that are included as example in the benchmark, such as the \emph{ForwardJumpingAgent} that was used for similar comparisons in the 2009 competition. As the \emph{GamePlayTrack} class was the method of evaluation for the 2010 Mario AI Competition, if the unedited class is used further comparisons can be drawn against it's entrants.
 
-The scoring mechanism used in the competitions is included in the benchmark software. The 2009 variant is contained in the \emph{CompetitionScore} class and the 2010 variant in the \emph{GamePlayTrack} class. Each scorer takes in a seed to initialise the levels used.
-
-In 2009, the Gameplay track was scored by agents playing 40 unseen levels with total distance travelled being the competition score. Tie-breakers were settled on game-time, number of kills, Mario's state at the end of each level.
-
-The 2010 competition's primarily addition was increased difficultly of levels (in terms of complexity, pit size, number of enemies etc.), which may include dead-ends (where the agent must back-track to continue). It also increased the number of levels played to 512.
-
-\subsubsection*{Approach}
-
-The agent will be evaluated in the style of the unseen Gameplay track of the 2010 Mario AI Competition. After the learning, the best individual will chosen to be evaluated by the \emph{GamePlayTrack} class. Here the agent will play 512 unseen levels (generated by a random seed). This will allow to compare against the results of the 2010 Competition (available from \cite{2012the}), although the levels played will be different.
-
-However, as it is not the aim of the project to produce the best possible agent, it may be advantageous to adapt the evaluation. Possible changes could include lowering the difficulty or removing dead-ends. This process weakens the comparison against the 2010 results. However, the evaluation class allows multiple agents to be evaluated over the same levels (by passing the same seed), so comparisons can be drawn against other available agents:
-
-\begin{itemize}
- \item The hand-crafted base-line agent constructed as Objective \ref{obj:handcraft}. This will show whether learning has a significant effect on the proficiency of the full agent.
-  \item The benchmark software includes several example agents, including a simple, hard-coded agent called \emph{ForwardJumpingAgent}, which was used for similar comparisons in the 2009 competition. \cite{2010the}
-  \item Baumgarten's A* agent, which contains no learning and was the winner in 2009. It is open-source and available online \cite{astar}.
-\end{itemize}
-
-The agent will also be assessed by the increase in fitness over time during learning. A steeper increase in fitness shows an effective learning process.
+The second part of this objective is to evaluate the learning procedure. Figures such as average and maximum generation fitness can provide an insight into the effectiveness of the genetic algorithm. Furthermore, a baseline for these values can be provided by having the handcrafted agent play the levels alongside the evolving agent. The final evaluation report will provide an analysis of these figures.
 
 %--------------
 % Timeline
@@ -608,33 +503,9 @@ The agent will also be assessed by the increase in fitness over time during lear
 \clearpage
 \section{Timeline}
 
-
 Work will begin on June 10th, and run until the 14th of September, when the report will be submitted. The writing of the report will be a continual process over the 96 days.
 
-\subsection{Phase 1}
-\subsubsection*{June 10th -- July 10th}
-\begin{description}
-	\item[4 days] Integration of the existing Java codebase with the Scala language and introduction of testing and build tools (as discussed in \ref{meth:software})
-	\item[10-12 days] Environment-condition translation scheme testing and implementation (as discussed in \ref{meth:cond}).
-	\item[10-12 days] Rule set interpretation testing and implementation (as discussed in \ref{meth:handcraft}).
-	\item[2 days] Construction of the handcrafted AI.
-\end{description}
-
-\subsection{Phase 2}
-\subsubsection*{July 10th -- September 7th}
-\begin{description}
-	\item[20 days] Integration of the evolutionary learning library with the benchmark software as described in \ref{meth:rlfw}.
-	\item[10-30 days] Experimentation and assessment of evolutionary methods to evolve rulesets, including revisiting the condition scheme (Section \ref{meth:explolearn}).
-	\item[10-30 days] Investigating possible extensions of the agent as spelled out in \ref{meth:expand}.
-\end{description}
-
-\subsection{Phase 3}
-\subsubsection*{August 24th -- September 14th}
-\begin{description}
-	\item[14 days] Evaluation of agent(s) as specified in \ref{meth:eval}.
-	\item[7 days] Finishing touches to the project report.
-\end{description}
-
+[TODO]
 
 
 \clearpage
@@ -877,7 +748,6 @@ Work will begin on June 10th, and run until the 14th of September, when the repo
   \emph{Agent Smith: a Real-Time Game-Playing Agent for Interactive Dynamic Games},
   GECCO 08, July 12?16, 2008, Atlanta, Georgia, USA.
   \url{http://www.cs.bham.ac.uk/~wbl/biblio/gecco2008/docs/p1839.pdf}.
-  
 
 \end{thebibliography}
 \end{document}
