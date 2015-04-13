@@ -11,6 +11,7 @@
 \usepackage{chngpage}
 \usepackage{array}
 \usepackage{pbox}
+\usepackage{amsmath}
 
 
 
@@ -430,7 +431,7 @@ It is foreseeable that certain parts of the project will be exploratory and as s
 \subsection{Objective \ref{obj:prep}: Preparation}
 \label{meth:prep}
 
-The Mario benchmark software is open-source\footnote{Available at http://www.marioai.org/gameplay-track/getting-started} and will form the initial codebase for this project. It is written in Java and contains the game-engine and useful features such as level generation and level playing classes. It also provides an agent interface, which will act as the link between my agent module and the game-engine. 
+The Mario benchmark software is open-source\footnote{Available at http://www.marioai.org/gameplay-track/getting-started} and will form the initial codebase for this project. It is written in Java and contains the game-engine and useful features such as level generation and level playing classes. It also provides an agent interface, which will act as the link between my agent module and the game-engine. The source files will imported into an Eclipse IDE project.
 
 I intend to use Scala as the main language of this project as I believe that it's functional and concurrent features will suit the problem. Scala and Java are widely compatible (as they both compile JVM bytecode) so this should no require a significant amount of work. However, the codebase will be assessed for the suitability of this approach, and Java 8 will be used if Scala proves to be counterproductive.
 
@@ -443,7 +444,7 @@ The design of both the agent and learning module will follow the approach of the
 
 The agent module will be a rule-based system that maps environment based conditions to explicit key presses. This project will explore changing the conditions of REALM's V1 agent. The available sensory information will be assessed and distilled into a list of simple observations. As in REALM these will likely be binary values with ternary conditions encoding preference in the rules, but other approaches will be considered.
 
-The learning module will utilise an offline genetic algorithm with the same configuration seen in \ref{ssec:realm}. Rulesets will be individuals, with rules as genomes. Fitness of an individual will be determined by playing generated levels. However, different approaches to mutation, crossover and reordering procedures will explored, as well as careful consideration of calculating fitness from level playing statistics.
+The learning module will utilise an offline genetic algorithm with the same configuration seen in \ref{ssec:realm}. Rulesets will be individuals, with rules as genomes. Fitness of an individual will be determined by playing generated levels. However, different approaches to mutation, crossover and reordering will be explored, as well as careful consideration of calculating fitness from level playing statistics.
 
 If time permits, a redesign of the agent, to incorporate a multi-tiered approach, will be explored. This will involve a reflection on previous approaches such as REALM V2 \cite{realm} and D. Perez et al. \cite{gramev}.
 
@@ -480,7 +481,7 @@ Due to the stochastic nature of genetic algorithms, testing of the learning modu
 
 
 \subsection{Objective \ref{obj:learn}: Learning}
-\label{meth:design}
+\label{meth:learn}
 
 The learning testbed will be generated levels. The benchmark software offers the \emph{LevelGenerator} class, which is tuneable by over 20 parameters including level complexity, enemy density and level length. The level generation is controlled by a seed, allowing levels to be regenerated if necessary. A new seed will be chosen for each generation and several levels will be generated with differing difficulties, length etc. In this way each individual of a generation will play the same levels, but over the course of the evolution a large number of levels will have been played, providing a large and diverse testbed.
 
@@ -508,7 +509,83 @@ The second part of this objective is to evaluate the learning procedure. Figures
 
 Work will begin on June 10th, and run until the 14th of September, when the report will be submitted. The writing of the report will be a continual process over the 96 days.
 
-[TODO]
+This section aims to break each objective into tasks and allocate a number of days to their completion. This time allocation, along with the objectives, will form the basis of a critique of the project, to be included in the final report.
+
+\subsection{Objective \ref{obj:prep}: Preparation}
+\label{time:prep}
+
+\begin{center}
+\begin{tabular}{ >{\bfseries}p{0.16\textwidth} p{0.79\textwidth} }
+	$\tfrac{1}{2}$ a day & Importing of benchmark software into Eclipse IDE.   \\[6pt] 
+	1 day & Assessment of use and possible inclusion of the Scala language.  \\[6pt] 
+	$\tfrac{1}{2}$ a day & Inclusion of build tools, testing frameworks and logging in to project files.  \\[6pt] 
+\end{tabular}
+\end{center}
+
+
+\subsection{Objective \ref{obj:design}: Design}
+\label{time:design}
+\begin{center}
+\begin{tabular}{ >{\bfseries}p{0.16\textwidth} p{0.79\textwidth} }
+	2-3 days & Design of structure and content of observation list (discussed in \ref{meth:design}). \\[6pt] 
+	2-3 days & Design of crossover, mutation and reordering procedures used within the genetic algorithm. \\[6pt] 
+	7-10 days & Re-design of the agent to adopt a multi-tier system, including reexamining previous approaches (Non-core task). \\[6pt] 
+\end{tabular}
+\end{center}
+
+\subsection{Objective \ref{obj:impl}: Implementation}
+\label{time:impl}
+\begin{center}
+\begin{tabular}{ >{\bfseries}p{0.16\textwidth} p{0.79\textwidth} }
+	4-7 days & Implementation of translation of \emph{Environment} to observation list in agent module (discussed in \ref{meth:impl}). \\[6pt] 
+	4-7 days & Implementation of semantic reasoner for ruleset in agent module. \\[6pt] 
+	5-8 days & Implementation of external ruleset persistence, including read and write access. \\[6pt] 
+	5-10 days & Implementation of agent re-design (Non-core task). \\[6pt] 
+\end{tabular}
+\end{center}	
+\begin{center}
+\begin{tabular}{ >{\bfseries}p{0.16\textwidth} p{0.79\textwidth} }
+	10-14 days & Integration of evolutionary Java library with the benchmark software. \\[6pt] 
+	3-6 days & Implementation of crossover, mutation and reordering of rulesets in the genetic algorithm. \\[6pt] 
+	3-6 days & Implementation of evolution fitness tracking and logging. \\[6pt] 
+\end{tabular}
+\end{center}
+
+\subsection{Objective \ref{obj:test}: Testing}
+\label{time:test}
+\begin{center}
+\begin{tabular}{ >{\bfseries}p{0.16\textwidth} p{0.79\textwidth} }
+	2-3 days & Writing of unit tests for agent module. \\[6pt] 
+	2 day & Writing black-box integration test for agent module. \\[6pt] 
+	4-7 days & Assessing and writing testing strategy for learning module. \\[6pt] 
+\end{tabular}
+\end{center}
+
+\subsection{Objective \ref{obj:learn}: Learning}
+\label{time:learn}
+\begin{center}
+\begin{tabular}{ >{\bfseries}p{0.16\textwidth} p{0.79\textwidth} }
+	10-20 days & Offline evolution of the agent. \\[6pt] 
+	3 days & Tuning of learning parameters (discussed in \ref{meth:learn}). \\[6pt] 
+\end{tabular}
+\end{center}
+
+\subsection{Objective \ref{obj:eval}: Evaluation}
+\label{time:eval}
+\begin{center}
+\begin{tabular}{ >{\bfseries}p{0.16\textwidth} p{0.79\textwidth} }
+	2-3 days & Evaluating capability of the final agent. \\[6pt] 
+	5 days & Collecting and charting data pertaining to agent evolution. \\[6pt] 
+	7 days & Finishing touches to the project report. \\[6pt] 
+\end{tabular}
+\end{center}
+
+\subsection{Total Allocation}
+The completion order of tasks will not follow the order presented here. This project is adopting an agile appraoch, revisiting tasks as it becomes necessary. The allocation given here is the time expected to be spend on each task in total. 
+
+Core task day allocation sums to between 70 and 106 days. This therefore allows a possible 26 days for non-core tasks (in \ref{time:design} and \ref{time:impl}) related to reengineering the agent to adopt a multi-tier approach.
+
+
 
 
 \clearpage
