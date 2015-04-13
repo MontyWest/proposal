@@ -86,7 +86,9 @@ source is explicitly acknowledged.}
 %------------------
 
 \begin{abstract}
-Artificial intelligence in video games has long shunned the use of machine learning in favour of a handcrafted approach. However, the recent rise in the use of video games as a benchmark for academic AI research has demonstrated interesting and successful learning approaches. This project aims to follow this research and explore the viability of a game-playing learning AI. This aim will be realised by implementing a evolutionary agent for a platform game based on Mario Bros. 3 and assessing the gains of the learning procedure.
+Artificial intelligence in video games has long shunned the use of machine learning in favour of a handcrafted approach. However, the recent rise in the use of video games as a benchmark for academic AI research has demonstrated interesting and successful learning approaches. This project aims to follow this research and explore the viability of a game-playing learning AI. Considering previous approaches, an evolutionary agent will be created for a platform game based on Mario Bros.
+
+The project will build on top of software developed for the Mario AI competition, which provides the game-engine and agent interface, as well as several other pertinent features. The code will be written in two modules. The basic agent being constructed first and then a learning framework built to improve it, utilising a genetic algorithm. The project will follow an agile methodology, revisiting design by analysing learning capability. The aim is to produce an agent the shows meaningful improvement during learning.
 \end{abstract}
 
 \vspace{10mm}
@@ -281,9 +283,9 @@ The REALM agent, developed by Slawomir Bojarski and Clare Bates Congdon, was the
 
 \subsubsection*{Rule-based}
 
-Rules map carefully chosen conditions (a simplification of the available environment information) to actions in a simple ruleset. Rule preference over binary conditions are either TRUE, FALSE or DONT\_CARE \cite[p.~85]{realm}. Each time step a rule is chosen that best fits the current condition, with ties being settled by rule order \cite[p.~86]{realm}.
+Each time step REALM creates a list of binary observations of the current scene, for example {\footnotesize IS\_ENEMY\_CLOSE\_LOWER\_RIGHT} and {\footnotesize IS\_PIT\_AHEAD}. Conditions on observations are mapped to actions in a simple ruleset. These conditions are ternary (either {\footnotesize TRUE}, {\footnotesize FALSE} or {\footnotesize DONT\_CARE}) \cite[p.~85]{realm}. A rule is chosen that best fits the current observations, with ties being settled by rule order, and an action is returned \cite[p.~86]{realm}.
 
-Actions in V1 were explicit key-press combinations, whereas in V2 two they are high-level plans. These plans were passed to a simulator, which reassessed the environment and used A* to produce the key-press combination. This two-tier approach was designed in part to reduce the search space of the learning algorithm. \cite[pp.~85-87]{realm}
+Actions in V1 are explicit key-press combinations, whereas in V2 they are high-level plans. These plans are passed to a simulator, which reassesses the environment and uses A* to produce the key-press combination. This two-tier approach was designed in part to reduce the search space of the learning algorithm. \cite[pp.~85-87]{realm}
 
 \subsubsection*{Learning}
 
@@ -291,7 +293,7 @@ REALM starts with a random ruleset and evolves it using a GA over 1000 generatio
 
 \paragraph{Population}
 
-Populations have a fixed size of 50 individuals, with each individual being a rule set. Each rule represents a genome and each individual has 20. Initially rules are randomised, with each condition having a 40\%, 30\%, 30\% chance to be DONT\_CARE, TRUE, FALSE respectively.
+Populations have a fixed size of 50 individuals, with each individual being a rule set. Each rule represents a genome and each individual has 20. Initially rules are randomised, with each condition having a 30\%, 30\%, 40\% chance to be {\footnotesize TRUE}, {\footnotesize FALSE} or {\footnotesize DONT\_CARE} respectively.
 
 \paragraph{Evaluation}
 
@@ -439,7 +441,7 @@ Furthermore the benchmark will be assessed for the inclusion of build tools, suc
 
 The design of both the agent and learning module will follow the approach of the REALM agent, discussed in \ref{ssec:realm}.
 
-The agent module will be a rule-based system that maps environment based conditions to explicit key presses. This project will explore changing the conditions of REALM's V1 agent. The available sensory information will be assessed and will be distilled into a list custom conditions. As in REALM these will likely be simple binary values with ternary operators encoding preference in the rules, but other approaches will be considered.
+The agent module will be a rule-based system that maps environment based conditions to explicit key presses. This project will explore changing the conditions of REALM's V1 agent. The available sensory information will be assessed and distilled into a list of simple observations. As in REALM these will likely be binary values with ternary conditions encoding preference in the rules, but other approaches will be considered.
 
 The learning module will utilise an offline genetic algorithm with the same configuration seen in \ref{ssec:realm}. Rulesets will be individuals, with rules as genomes. Fitness of an individual will be determined by playing generated levels. However, different approaches to mutation, crossover and reordering procedures will explored, as well as careful consideration of calculating fitness from level playing statistics.
 
@@ -480,12 +482,13 @@ Due to the stochastic nature of genetic algorithms, testing of the learning modu
 \subsection{Objective \ref{obj:learn}: Learning}
 \label{meth:design}
 
-Optimising parameters for the genetic algorithm will be an important stage of the project. Assessment of the parameters of previous agent such as REALM (discussed in \ref{realm}) D. Perez et al. \cite{gramev} and Agent Smith \ref{agent smith} will inform the initial values. From there learning module logs will be analysed for improvements. For example, if there is a lot of variation in fitness then perhaps mutation should be restricted, or if the average fitness of each generation does not eventually level out then the process should go on for longer.
+The learning testbed will be generated levels. The benchmark software offers the \emph{LevelGenerator} class, which is tuneable by over 20 parameters including level complexity, enemy density and level length. The level generation is controlled by a seed, allowing levels to be regenerated if necessary. A new seed will be chosen for each generation and several levels will be generated with differing difficulties, length etc. In this way each individual of a generation will play the same levels, but over the course of the evolution a large number of levels will have been played, providing a large and diverse testbed.
+
+Optimising the testbed parameters, as well as the parameters of the breeding phase and fitness function, will be an important stage of the project. Assessment of the parameters used in previous agent such as REALM (discussed in \ref{ssec:realm}) D. Perez et al. \cite{gramev} and Agent Smith \cite{agentsmith} will inform the initial values. From there learning module logs will be analysed for improvements. For example, if there is a lot of variation in fitness then perhaps mutation should be restricted, or if the average fitness does not eventually level out then the further generations should be created.
 
 The design of the agent can also influence the effectiveness of the learning algorithm. The size of the search space is determined by the conditions and actions of the rulesets, the reduction of which could improve evolutionary capability. Hence, the learning phase of the project may inform a redesign of the agent, which is one of the main reasons this project will take an agile approach.
 
-The learning itself is likely to a time consuming, computationally heavy procedure. To assist in providing ample resources to this process the project will have access to two 
-8 core servers, as well as a laptop with an Intel i7 processor.
+The learning itself is likely to be a time consuming, computationally heavy procedure. To assist in providing ample resources to this process the project will have access to two 8 core servers, as well as a laptop with an Intel i7 processor.
 
 
 \subsection{Objective \ref{obj:eval}: Evaluation}
@@ -493,7 +496,7 @@ The learning itself is likely to a time consuming, computationally heavy procedu
 
 The benchmark software provides classes for evaluating agents. The best ruleset will be chosen from the final generation of the genetic algorithm and tested using the \emph{GamePlayTrack} class. Here the agent will play 512 unseen levels of varying type and difficulty. These levels are initiated by a seed, and therefore multiple agents can be scored on the same levels, which allows agents to be directly compared. Due to the limitations of the project discussed in \ref{ssec:limits}, editing this class to make the trial less demanding will be explored as it may produce a more useful evaluation.
 
-The primary comparison will be with a handcraft version of the agent, which will assess the significance of the agent evolution. Other comparisons can be drawn against agents that are included as example in the benchmark, such as the \emph{ForwardJumpingAgent} that was used for similar comparisons in the 2009 competition. As the \emph{GamePlayTrack} class was the method of evaluation for the 2010 Mario AI Competition, if the unedited class is used further comparisons can be drawn against it's entrants.
+The primary comparison will be with a handcrafted ruleset, which will assess the significance of the agent evolution. Other comparisons can be drawn against agents that are included as example in the benchmark, such as the \emph{ForwardJumpingAgent} that was used for similar comparisons in the 2009 competition. As the \emph{GamePlayTrack} class was the method of evaluation for the 2010 Mario AI Competition, if the unedited class is used further comparisons can be drawn against it's entrants.
 
 The second part of this objective is to evaluate the learning procedure. Figures such as average and maximum generation fitness can provide an insight into the effectiveness of the genetic algorithm. Furthermore, a baseline for these values can be provided by having the handcrafted agent play the levels alongside the evolving agent. The final evaluation report will provide an analysis of these figures.
 
@@ -501,7 +504,7 @@ The second part of this objective is to evaluate the learning procedure. Figures
 % Timeline
 %--------------
 \clearpage
-\section{Timeline}
+\section{Time Allocation}
 
 Work will begin on June 10th, and run until the 14th of September, when the report will be submitted. The writing of the report will be a continual process over the 96 days.
 
